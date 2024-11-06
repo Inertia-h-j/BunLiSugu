@@ -134,25 +134,27 @@
         async function init() {
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
-
+        
             try {
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
-
-                webcam = new tmImage.Webcam(640, 480, false); // flip=false
-                await webcam.setup(); // 웹캠 접근 권한 요청
-                webcam.play();
-
-                const container = document.getElementById("webcam-container");
-                container.innerHTML = ""; // 기존 내용 지우기
-                container.appendChild(webcam.canvas); // 캔버스 추가
-
-                window.requestAnimationFrame(loop); // 예측 루프 시작
+        
+                // 카메라 스트림을 가져옵니다.
+                video = document.getElementById("video");
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: "environment" } // 후면 카메라 설정
+                });
+                video.srcObject = stream;
+        
+                video.addEventListener('loadeddata', () => {
+                    window.requestAnimationFrame(loop);
+                });
             } catch (error) {
-                console.error("모델 또는 웹캠 로드 중 오류 발생:", error);
+                console.error("모델 또는 카메라 로드 중 오류 발생:", error);
                 alert("카메라를 사용할 수 없습니다. 권한을 허용했는지 확인하세요.");
             }
         }
+
 
         async function loop() {
             if (webcam) {
