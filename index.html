@@ -20,7 +20,7 @@
             font-size: 24px;
         }
 
-        #webcam-container {
+        #camera-container {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -32,10 +32,6 @@
             max-height: 360px;
             overflow: hidden;
             background-color: black;
-        }
-
-        canvas {
-            border-radius: 8px;
         }
 
         #search {
@@ -120,7 +116,9 @@
     </div>
 
     <h1>쓰레기를 카메라에 보여주세요</h1>
-    <div id="webcam-container"></div>
+    <div id="camera-container">
+        <video id="video" autoplay playsinline></video>
+    </div>
 
     <!-- TensorFlow.js and Teachable Machine Image library -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.9.0"></script>
@@ -128,24 +126,22 @@
     <script>
         const URL = "https://teachablemachine.withgoogle.com/models/zCNkWNvc1/";
 
-        let model, webcam, maxPredictions;
+        let model, maxPredictions, video;
 
-        // 모델을 로드합니다
+        // 모델과 카메라를 초기화합니다.
         async function init() {
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
-        
+
             try {
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
-        
+
                 // 카메라 스트림을 가져옵니다.
                 video = document.getElementById("video");
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "environment" } // 후면 카메라 설정
-                });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 video.srcObject = stream;
-        
+
                 video.addEventListener('loadeddata', () => {
                     window.requestAnimationFrame(loop);
                 });
@@ -155,17 +151,13 @@
             }
         }
 
-
         async function loop() {
-            if (webcam) {
-                webcam.update(); // 웹캠 화면 업데이트
-                await predict(); // 예측
-            }
-            window.requestAnimationFrame(loop); // 루프 반복
+            await predict();
+            window.requestAnimationFrame(loop);
         }
 
         async function predict() {
-            const prediction = await model.predict(webcam.canvas); // 웹캠 캔버스를 통한 예측
+            const prediction = await model.predict(video); // 비디오를 통한 예측
 
             for (let i = 0; i < maxPredictions; i++) {
                 const classPrediction = prediction[i].className;
@@ -206,6 +198,7 @@
             console.error("해당 클래스에 대한 사이트가 없습니다:", className);
         }
 
+        // 필터링 기능 코드
         function filterList() {
             const searchInput = document.getElementById('search').value.toLowerCase();
             const items = document.getElementById('itemList').getElementsByTagName('li');
