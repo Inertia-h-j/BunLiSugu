@@ -62,8 +62,41 @@
             margin-bottom: 10px;
         }
 
-        #desc폼 분리수거 안내</h3>
-        <p id="descriptionText">스티로폼 박스는 내용물을 비우고 깨끗하게 헹군 뒤 <br>날리지 않도록 끈으로 묶거나 비닐에 담아 스티로폼 수거함에 배출해야합니다
+        #descriptionText {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #666;
+        }
+
+        button {
+            width: 90%;
+            max-width: 750px;
+            margin: 20px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>스티로폼</h2>
+
+    <div id="imageContainer">
+        <img id="capturedImage" src="https://png.pngtree.com/png-clipart/20220926/original/pngtree-a-plastic-bag-png-image_8632689.png" alt="Captured Image">
+    </div>
+
+    <div id="description">
+        <h3>스티로폼 분리수거 안내</h3>
+        <p id="descriptionText">이물질을 물로 헹구거나 제거한 후 배출해야합니다<br>만약 비닐에 묻은 음식물, 스티커 등을 제거하기 어렵다면 종량제봉투로 배출해야 합니다
     </div>
 
     <button id="backButton" onclick="goToIndex()">돌아가기</button>
