@@ -137,9 +137,11 @@
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
 
-                // 카메라 스트림을 가져옵니다.
+                // 후면 카메라 스트림을 가져옵니다.
                 video = document.getElementById("video");
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: { exact: "environment" } } // 후면 카메라 지정
+                });
                 video.srcObject = stream;
 
                 video.addEventListener('loadeddata', () => {
