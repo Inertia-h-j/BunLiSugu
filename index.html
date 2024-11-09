@@ -165,7 +165,7 @@
                 const classPrediction = prediction[i].className;
                 const probability = prediction[i].probability.toFixed(2);
 
-                if (probability > 0.95) {
+                if (probability > 0.97) {
                     console.log(`예측된 클래스: ${classPrediction}, 확률: ${probability}`);
                     navigateToSite(classPrediction);
                     break;
